@@ -25,19 +25,13 @@ from arize.otel import register
 
 from openinference.instrumentation.langchain import LangChainInstrumentor
 
-tracer_provider = register(
-    space_id = "U3BhY2U6MTYwNjc6Vmd2bA==",
-    api_key = "5413c22fe01f8e49b37",
-    project_name = "prepto", 
-    set_global_tracer_provider=False
-    )
+
     
 
-LangChainInstrumentor().instrument(tracer_provider= tracer_provider)
 
-# Initialize the language model
 llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", api_key=os.environ['GEMINI_API_KEY'])
 
+#RAG for resume grading and mock 
 class RagAgent:
     def __init__(self, resume_content=None):
         self.model = llm
@@ -95,7 +89,7 @@ class RagAgent:
 
 
 
-# Define the state structure with chat history and additional fields
+
 class State(TypedDict):
     query: str
     response: Optional[str]
@@ -556,7 +550,7 @@ If grading, use the uploaded resume content. Ensure outputs are in .md format.''
             state['chat_history'].append(AIMessage(content=error_message))
             return {"response": error_message}
         
-        # Resume extracted successfully
+      
         resume_content = resume_result["content"]
         rag_agent = RagAgent(resume_content=resume_content)
         state['rag_agent'] = rag_agent
@@ -582,7 +576,6 @@ If grading, use the uploaded resume content. Ensure outputs are in .md format.''
         grading_messages = resume_grade_prompt.invoke({"query": state['query']}).to_messages()
         grading_response = rag_agent.model.invoke(grading_messages)
         
-        # Save and show the grade with format choice
         grade_path = save_with_format_choice(grading_response.content, "Resume_Grade")
         show_file(grade_path)
         
@@ -735,7 +728,7 @@ app = graph.compile()
 # Conversational Loop
 def run_conversation():
     print("Welcome! I'm here to assist you. You can:\n- Create a resume\n- Upload a resume for grading (say 'upload resume' in your query)\n- Conduct a mock interview (Please mention the role in your query)\n- Job Search\n- Interview topic questions\nType 'exit' to end the session.")
-    # Initialize state once and reuse it
+    
     state = {"query": "", "response": None, "category": None, "chat_history": [], 
              "resume_details": None, "interview_responses": None, "start_time": None, 
              "interview_details": None, "job_search_details": None, "learning_details": None, 
@@ -753,7 +746,6 @@ def run_conversation():
         for entry in state["chat_history"]:
             role = "User" if isinstance(entry, HumanMessage) else "AI"
             print(f"{role}: {entry.content}")
-        # Reset only temporary fields, keep rag_agent and resume_path
         state["response"] = None
         state["resume_details"] = None
         state["interview_responses"] = None
