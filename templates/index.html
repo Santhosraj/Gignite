@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gignite - Focus on your goal</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body class="bg-gradient-to-br from-gray-900 to-indigo-900 text-white min-h-screen">
+    <header class="bg-indigo-800 shadow-lg p-6">
+        <h1 class="text-4xl font-extrabold text-center text-indigo-200">Gignite</h1>
+        <p class="text-center text-indigo-300 mt-2">Fuel Your Future, Spark the Change</p>
+    </header>
+    <main class="container mx-auto p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-xl transition duration-300">
+                <h2 class="text-2xl font-semibold text-indigo-400 mb-4">Resume Maker</h2>
+                <form action="/start_query" method="post" class="space-y-4">
+                    <input type="hidden" name="session_id" value="default">
+                    <input type="text" name="query" placeholder="e.g., Create a resume for AI engineer"
+                        class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        required>
+                    <button type="submit"
+                        class="w-full p-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-medium transition duration-200">Generate
+                        Resume</button>
+                </form>
+                <form action="/upload_resume" method="post" enctype="multipart/form-data" class="mt-4 space-y-4">
+                    <input type="hidden" name="session_id" value="default">
+                    <input type="text" name="target_role" placeholder="Target Role (e.g., AI Engineer)"
+                        class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        required>
+                    <input type="file" name="file" accept=".pdf,.doc,.docx"
+                        class="w-full p-3 bg-gray-700 rounded-lg text-white">
+                    <button type="submit"
+                        class="w-full p-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-medium transition duration-200">Upload
+                        & Grade</button>
+                </form>
+            </div>
+
+            <div class="bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-xl transition duration-300">
+                <h2 class="text-2xl font-semibold text-green-400 mb-4">Interview Prep</h2>
+                <form action="/start_query" method="post" class="space-y-4">
+                    <input type="hidden" name="session_id" value="default">
+                    <input type="text" name="query" placeholder="e.g., Prepare for interview for Data Scientist"
+                        class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                        required>
+                    <button type="submit"
+                        class="w-full p-3 bg-green-600 hover:bg-green-700 rounded-lg font-medium transition duration-200">Get
+                        Questions</button>
+                </form>
+            </div>
+
+            <div class="bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-xl transition duration-300">
+                <h2 class="text-2xl font-semibold text-green-400 mb-4">Mock Interview</h2>
+                <form action="/start_mock_interview" method="post" enctype="multipart/form-data" class="space-y-4">
+                    <input type="hidden" name="session_id" value="default">
+                    <input type="text" name="target_role" placeholder="Target Role (e.g., Data Scientist)"
+                        class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                        required>
+                    <input type="file" name="file" accept=".pdf,.doc,.docx"
+                        class="w-full p-3 bg-gray-700 rounded-lg text-white" required>
+                    <button type="submit"
+                        class="w-full p-3 bg-green-600 hover:bg-green-700 rounded-lg font-medium transition duration-200">Start
+                        Mock Interview</button>
+                </form>
+            </div>
+
+            <div class="bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-xl transition duration-300">
+                <h2 class="text-2xl font-semibold text-blue-400 mb-4">Job Search</h2>
+                <form action="/start_query" method="post" class="space-y-4">
+                    <input type="hidden" name="session_id" value="default">
+                    <input type="text" name="query" placeholder="e.g., AI engineer jobs"
+                        class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                    <button type="submit"
+                        class="w-full p-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium transition duration-200">Search
+                        Jobs</button>
+                </form>
+            </div>
+
+            <div class="bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-xl transition duration-300">
+                <h2 class="text-2xl font-semibold text-purple-400 mb-4">Learning Resources</h2>
+                <form action="/start_query" method="post" class="space-y-4">
+                    <input type="hidden" name="session_id" value="default">
+                    <input type="text" name="query" placeholder="e.g., Learn Python for beginners"
+                        class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        required>
+                    <button type="submit"
+                        class="w-full p-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium transition duration-200">Get
+                        Resources</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    <footer class="text-center text-gray-400 py-4">
+        <p>Are you accelerating, anon?</p>
+        <p>San's production 🚀</p>
+    </footer>
+</body>
+
+</html>

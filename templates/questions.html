@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questions - Gignite</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body class="bg-gradient-to-br from-gray-900 to-indigo-900 text-white min-h-screen flex items-center justify-center">
+    <header class="bg-indigo-800 shadow-lg p-6">
+        <h1 class="text-4xl font-extrabold text-center text-indigo-200">Gignite</h1>
+    </header>
+    <div class="bg-gray-800 rounded-xl p-8 shadow-lg max-w-2xl w-full">
+        <h1 class="text-3xl font-bold text-indigo-400 mb-6">{{ state.query }}</h1>
+        {% if state.instructions %}
+        <div class="bg-indigo-900 p-4 rounded-lg mb-6">
+            <p class="text-indigo-200 whitespace-pre-wrap">{{ state.instructions }}</p>
+        </div>
+        {% endif %}
+        {% if state.category == "5" and state.current_step >= 2 %}
+        <div class="mb-6 flex items-center justify-between">
+            <p class="text-lg font-semibold text-green-400">Question {{ state.current_step }} of 20</p>
+            <p id="timer" class="text-lg font-semibold text-yellow-400">Time: 00:00</p>
+        </div>
+        {% else %}
+        <p class="text-lg font-semibold text-green-400 mb-4">Question {{ state.current_step + 1 }} of {{
+            state.questions|length }}</p>
+        {% endif %}
+        <p class="text-xl mb-6">{{ state.questions[state.current_step] }}</p>
+        <form action="/submit_answer" method="post" class="space-y-4">
+            <input type="hidden" name="session_id" value="default">
+            <textarea name="answer" rows="4"
+                class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="Your answer..." required></textarea>
+            <button type="submit"
+                class="w-full p-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-medium transition duration-200">Submit
+                Answer</button>
+        </form>
+    </div>
+
+    {% if state.category == "5" and state.current_step >= 2 %}
+    <script>
+        let startTime = parseFloat("{{ state.start_time or 0 }}");
+        function updateTimer() {
+            let now = Date.now() / 1000; // Current time in seconds
+            let elapsed = Math.floor(now - startTime);
+            let minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+            let seconds = (elapsed % 60).toString().padStart(2, '0');
+            document.getElementById('timer').textContent = `Time: ${minutes}:${seconds}`;
+        }
+        updateTimer();
+        setInterval(updateTimer, 1000);
+    </script>
+    {% endif %}
+</body>
+
+
+</html>

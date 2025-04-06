@@ -1,0 +1,7 @@
+.task-btn {
+    @apply w-full p-4 text-lg font-semibold text-white rounded-lg transition duration-300 transform hover:scale-105;
+}
+
+.section {
+    @apply border border-gray-700;
+}
