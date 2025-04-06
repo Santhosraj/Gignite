@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: gignite-app
+    env: docker
+    plan: free
+    region: oregon
+    dockerContext: .
+    dockerfilePath: Dockerfile
+    branch: main
+    autoDeploy: true
