@@ -36,15 +36,19 @@
     {% if state.category == "5" and state.start_time %}
     <script>
         // Total duration of the mock interview: 60 minutes in milliseconds
-        const totalDuration = 60 * 60 * 1000; // 3600000 ms
-        // Server start time (Unix timestamp in seconds)
-        const startTime = parseInt("{{ state.start_time }}") * 1000; // Convert to milliseconds
+         const totalDuration = 60 * 60 * 1000; // 3600000 ms
+        // Server start time (Unix timestamp in seconds) converted to milliseconds 
+        const startTime = Number("{{ state.start_time }}") * 1000;
         // Current time when page loads (in milliseconds)
         const currentTime = Date.now();
         // Calculate elapsed time since the mock interview started
-        const elapsedTime = currentTime - startTime;
-        // Remaining time starts from 60 minutes minus elapsed time
-        let timeLeft = Math.max(totalDuration - elapsedTime, 0);
+        let elapsedTime = currentTime - startTime;
+        // Ensure elapsedTime is not negative (in case of clock skew or session issues)
+        elapsedTime = Math.max(elapsedTime, 0);
+        // Calculate remaining time, capped at totalDuration
+        let timeLeft = Math.min(totalDuration - elapsedTime, totalDuration);
+
+        const countdownElement = document.getElementById("countdown");
 
         const countdownElement = document.getElementById("countdown");
 
