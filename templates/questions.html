@@ -10,50 +10,72 @@
 </head>
 
 <body class="bg-gradient-to-br from-gray-900 to-indigo-900 text-white min-h-screen flex items-center justify-center">
-    
-    <div class="bg-gray-800 rounded-xl p-8 shadow-lg max-w-2xl w-full">
+    <div class="bg-gray-800 rounded-xl p-8 shadow-lg max-w-3xl w-full">
         <h1 class="text-3xl font-bold text-indigo-400 mb-6">{{ state.query }}</h1>
         {% if state.instructions %}
-        <div class="bg-indigo-900 p-4 rounded-lg mb-6">
-            <p class="text-indigo-200 whitespace-pre-wrap">{{ state.instructions }}</p>
+        <div class="bg-gray-700 p-6 rounded-lg mb-6 overflow-auto max-h-96 whitespace-pre-wrap">{{ state.instructions }}
         </div>
         {% endif %}
-        {% if state.category == "5" and state.current_step >= 2 %}
-        <div class="mb-6 flex items-center justify-between">
-            <p class="text-lg font-semibold text-green-400">Question {{ state.current_step }} of 20</p>
-            <p id="timer" class="text-lg font-semibold text-yellow-400">Time: 00:00</p>
-        </div>
-        {% else %}
-        <p class="text-lg font-semibold text-green-400 mb-4">Question {{ state.current_step + 1 }} of {{
-            state.questions|length }}</p>
+        <p class="text-xl text-green-400 mb-4">Question {{ state.current_step + 1 }} of {{ state.questions|length }}</p>
+        {% if state.category == "5" and state.start_time %}
+        <div id="timer" class="text-lg text-yellow-400 mb-4">Time Remaining: <span id="countdown"></span></div>
         {% endif %}
-        <p class="text-xl mb-6">{{ state.questions[state.current_step] }}</p>
+        <p class="text-lg mb-6">{{ state.questions[state.current_step] }}</p>
         <form action="/submit_answer" method="post" class="space-y-4">
-            <input type="hidden" name="session_id" value="default">
-            <textarea name="answer" rows="4"
-                class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder="Your answer..." required></textarea>
+            <input type="hidden" name="session_id" value="{{ session_id }}">
+            <textarea name="answer" placeholder="Your answer here"
+                class="w-full p-3 bg-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 h-40"
+                required></textarea>
             <button type="submit"
                 class="w-full p-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-medium transition duration-200">Submit
                 Answer</button>
         </form>
+        <a href="/" class="block text-center mt-4 text-indigo-400 hover:text-indigo-300">Back to Home</a>
     </div>
 
-    {% if state.category == "5" and state.current_step >= 2 %}
+    {% if state.category == "5" and state.start_time %}
     <script>
-        let startTime = parseFloat("{{ state.start_time or 0 }}");
+        // Total duration of the mock interview: 60 minutes in milliseconds
+        const totalDuration = 60 * 60 * 1000; // 3600000 ms
+        // Server start time (Unix timestamp in seconds)
+        const startTime = parseInt("{{ state.start_time }}") * 1000; // Convert to milliseconds
+        // Current time when page loads (in milliseconds)
+        const currentTime = Date.now();
+        // Calculate elapsed time since the mock interview started
+        const elapsedTime = currentTime - startTime;
+        // Remaining time starts from 60 minutes minus elapsed time
+        let timeLeft = Math.max(totalDuration - elapsedTime, 0);
+
+        const countdownElement = document.getElementById("countdown");
+
+        // Function to update the timer display
         function updateTimer() {
-            let now = Date.now() / 1000; // Current time in seconds
-            let elapsed = Math.floor(now - startTime);
-            let minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
-            let seconds = (elapsed % 60).toString().padStart(2, '0');
-            document.getElementById('timer').textContent = `Time: ${minutes}:${seconds}`;
+            const minutes = Math.floor(timeLeft / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            countdownElement.textContent = `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                countdownElement.textContent = "0:00";
+                alert("Time's up! Please submit your final answer.");
+            } else {
+                timeLeft -= 1000; // Decrease by 1 second
+            }
         }
-        updateTimer();
-        setInterval(updateTimer, 1000);
+
+        // Start the timer if there's time left
+        if (timeLeft > 0) {
+            updateTimer(); // Initial display
+            const timerInterval = setInterval(updateTimer, 1000); // Update every second
+
+            // Cleanup interval on page unload
+            window.onunload = () => clearInterval(timerInterval);
+        } else {
+            countdownElement.textContent = "0:00";
+            alert("Time's up! The mock interview has ended.");
+        }
     </script>
     {% endif %}
 </body>
-
 
 </html>
