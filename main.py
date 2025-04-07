@@ -25,6 +25,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
 import asyncio
+from uuid import uuid4
 
 load_dotenv()
 
@@ -347,6 +348,7 @@ def mock_interview(state: State) -> State:
 - Then, you’ll face 20 questions (5 resume-based if uploaded, 15 technical).
 - Answer each question thoughtfully; your responses will be evaluated.
 - A timer will start once the actual questions begin.
+- You have 60 mins .
 - Take your time, but aim to keep answers concise (1-2 minutes each).'''
         state["questions"] = interview_agent.generate_clarification_questions(state)
     elif state["current_step"] >= len(state["questions"]) and len(state["interview_responses"]) < 20:
@@ -412,52 +414,49 @@ graph.add_edge("tutorial_agent", END)
 graph.add_edge("query_bot", END)
 app_graph = graph.compile()
 
+def initialize_state() -> State:
+    return {
+        "query": "",
+        "response": None,
+        "category": None,
+        "chat_history": [],
+        "resume_details": {},
+        "interview_responses": [],
+        "start_time": None,
+        "interview_details": {},
+        "job_search_details": {},
+        "learning_details": {},
+        "rag_agent": None,
+        "resume_path": None,
+        "current_step": 0,
+        "questions": [],
+        "content": None,
+        "instructions": None
+    }
+
 state_store: Dict[str, State] = {}
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
+    # Clear all session data when returning to home
+    state_store.clear()
     return templates.TemplateResponse("index.html", {"request": request})
 
 @app.post("/start_query", response_class=HTMLResponse)
-async def start_query(request: Request, query: str = Form(...), session_id: str = Form(default="default")):
-    if session_id not in state_store:
-        state_store[session_id] = {
-            "query": "",
-            "response": None,
-            "category": None,
-            "chat_history": [],
-            "resume_details": {},
-            "interview_responses": [],
-            "start_time": None,
-            "interview_details": {},
-            "job_search_details": {},
-            "learning_details": {},
-            "rag_agent": None,
-            "resume_path": None,
-            "current_step": 0,
-            "questions": [],
-            "content": None,
-            "instructions": None
-        }
-    
+async def start_query(request: Request, query: str = Form(...), session_id: str = Form(default=None)):
+    if not session_id or session_id == "default":
+        session_id = str(uuid4())  # Generate a unique session ID
+    state_store[session_id] = initialize_state()
     state = state_store[session_id]
     state["query"] = query
     state["chat_history"] = [HumanMessage(content=query)]
-    state["current_step"] = 0
-    state["resume_details"] = {}
-    state["interview_responses"] = []
-    state["interview_details"] = {}
-    state["job_search_details"] = {}
-    state["learning_details"] = {}
-    state["content"] = None
-    state["instructions"] = None
     
     results = await asyncio.to_thread(app_graph.invoke, state)
     state.update(results)
     
     if not state["questions"]:
-        return templates.TemplateResponse("result.html", {"request": request, "state": state})
-    return templates.TemplateResponse("questions.html", {"request": request, "state": state})
+        return templates.TemplateResponse("result.html", {"request": request, "state": state, "session_id": session_id})
+    return templates.TemplateResponse("questions.html", {"request": request, "state": state, "session_id": session_id})
 
 @app.post("/submit_answer", response_class=HTMLResponse)
 async def submit_answer(request: Request, answer: str = Form(...), session_id: str = Form(...)):
@@ -482,31 +481,13 @@ async def submit_answer(request: Request, answer: str = Form(...), session_id: s
     state.update(results)
     
     if state["content"]:
-        return templates.TemplateResponse("result.html", {"request": request, "state": state})
-    return templates.TemplateResponse("questions.html", {"request": request, "state": state})
+        return templates.TemplateResponse("result.html", {"request": request, "state": state, "session_id": session_id})
+    return templates.TemplateResponse("questions.html", {"request": request, "state": state, "session_id": session_id})
 
 @app.post("/upload_resume", response_class=HTMLResponse)
-async def upload_resume(request: Request, file: UploadFile = File(...), target_role: str = Form(...), session_id: str = Form(default="default")):
-    if session_id not in state_store:
-        state_store[session_id] = {
-            "query": "",
-            "response": None,
-            "category": None,
-            "chat_history": [],
-            "resume_details": {},
-            "interview_responses": [],
-            "start_time": None,
-            "interview_details": {},
-            "job_search_details": {},
-            "learning_details": {},
-            "rag_agent": None,
-            "resume_path": None,
-            "current_step": 0,
-            "questions": [],
-            "content": None,
-            "instructions": None
-        }
-    
+async def upload_resume(request: Request, file: UploadFile = File(...), target_role: str = Form(...)):
+    session_id = str(uuid4())  # Unique session for resume grading
+    state_store[session_id] = initialize_state()
     state = state_store[session_id]
     file_content = await file.read()
     file_extension = os.path.splitext(file.filename.lower())[1]
@@ -520,9 +501,9 @@ async def upload_resume(request: Request, file: UploadFile = File(...), target_r
     
     if resume_result["status"] == "error":
         state["query"] = f"Upload resume for {target_role}"
-        state["response"] = resume_result["message"]
+        state["response"] =resume_result["message"]
         state["chat_history"] = [HumanMessage(content=state["query"]), AIMessage(content=state["response"])]
-        return templates.TemplateResponse("result.html", {"request": request, "state": state})
+        return templates.TemplateResponse("result.html", {"request": request, "state": state, "session_id": session_id})
     
     state["query"] = f"Upload resume for {target_role}"
     state["rag_agent"] = RagAgent(resume_content=resume_result["content"])
@@ -531,30 +512,12 @@ async def upload_resume(request: Request, file: UploadFile = File(...), target_r
     state["response"] = "Resume graded successfully."
     state["chat_history"] = [HumanMessage(content=state["query"]), AIMessage(content=state["content"])]
     
-    return templates.TemplateResponse("result.html", {"request": request, "state": state})
+    return templates.TemplateResponse("result.html", {"request": request, "state": state, "session_id": session_id})
 
 @app.post("/start_mock_interview", response_class=HTMLResponse)
-async def start_mock_interview(request: Request, file: UploadFile = File(...), target_role: str = Form(...), session_id: str = Form(default="default")):
-    if session_id not in state_store:
-        state_store[session_id] = {
-            "query": "",
-            "response": None,
-            "category": None,
-            "chat_history": [],
-            "resume_details": {},
-            "interview_responses": [],
-            "start_time": None,
-            "interview_details": {},
-            "job_search_details": {},
-            "learning_details": {},
-            "rag_agent": None,
-            "resume_path": None,
-            "current_step": 0,
-            "questions": [],
-            "content": None,
-            "instructions": None
-        }
-    
+async def start_mock_interview(request: Request, file: UploadFile = File(...), target_role: str = Form(...)):
+    session_id = str(uuid4())  # Unique session for mock interview
+    state_store[session_id] = initialize_state()
     state = state_store[session_id]
     file_content = await file.read()
     file_extension = os.path.splitext(file.filename.lower())[1]
@@ -570,7 +533,7 @@ async def start_mock_interview(request: Request, file: UploadFile = File(...), t
         state["query"] = f"Conduct a mock interview for {target_role}"
         state["response"] = resume_result["message"]
         state["chat_history"] = [HumanMessage(content=state["query"]), AIMessage(content=state["response"])]
-        return templates.TemplateResponse("result.html", {"request": request, "state": state})
+        return templates.TemplateResponse("result.html", {"request": request, "state": state, "session_id": session_id})
     
     state["query"] = f"Conduct a mock interview for {target_role}"
     state["rag_agent"] = RagAgent(resume_content=resume_result["content"])
@@ -581,7 +544,7 @@ async def start_mock_interview(request: Request, file: UploadFile = File(...), t
     results = await asyncio.to_thread(app_graph.invoke, state)
     state.update(results)
     
-    return templates.TemplateResponse("questions.html", {"request": request, "state": state})
+    return templates.TemplateResponse("questions.html", {"request": request, "state": state, "session_id": session_id})
 
 @app.post("/save_file")
 async def save_file_endpoint(filename: str = Form(...), format_choice: str = Form(...), content: str = Form(...)):
