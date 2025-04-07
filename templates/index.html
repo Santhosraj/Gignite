@@ -19,7 +19,6 @@
             <div class="bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-xl transition duration-300">
                 <h2 class="text-2xl font-semibold text-indigo-400 mb-4">Resume Maker</h2>
                 <form action="/start_query" method="post" class="space-y-4">
-                    <input type="hidden" name="session_id" value="default">
                     <input type="text" name="query" placeholder="e.g., Create a resume for AI engineer"
                         class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         required>
@@ -28,7 +27,6 @@
                         Resume</button>
                 </form>
                 <form action="/upload_resume" method="post" enctype="multipart/form-data" class="mt-4 space-y-4">
-                    <input type="hidden" name="session_id" value="default">
                     <input type="text" name="target_role" placeholder="Target Role (e.g., AI Engineer)"
                         class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         required>
@@ -43,7 +41,6 @@
             <div class="bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-xl transition duration-300">
                 <h2 class="text-2xl font-semibold text-green-400 mb-4">Interview Prep</h2>
                 <form action="/start_query" method="post" class="space-y-4">
-                    <input type="hidden" name="session_id" value="default">
                     <input type="text" name="query" placeholder="e.g., Prepare for interview for Data Scientist"
                         class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500"
                         required>
@@ -56,7 +53,6 @@
             <div class="bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-xl transition duration-300">
                 <h2 class="text-2xl font-semibold text-green-400 mb-4">Mock Interview</h2>
                 <form action="/start_mock_interview" method="post" enctype="multipart/form-data" class="space-y-4">
-                    <input type="hidden" name="session_id" value="default">
                     <input type="text" name="target_role" placeholder="Target Role (e.g., Data Scientist)"
                         class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500"
                         required>
@@ -71,7 +67,6 @@
             <div class="bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-xl transition duration-300">
                 <h2 class="text-2xl font-semibold text-blue-400 mb-4">Job Search</h2>
                 <form action="/start_query" method="post" class="space-y-4">
-                    <input type="hidden" name="session_id" value="default">
                     <input type="text" name="query" placeholder="e.g., AI engineer jobs"
                         class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required>
@@ -84,7 +79,6 @@
             <div class="bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-xl transition duration-300">
                 <h2 class="text-2xl font-semibold text-purple-400 mb-4">Learning Resources</h2>
                 <form action="/start_query" method="post" class="space-y-4">
-                    <input type="hidden" name="session_id" value="default">
                     <input type="text" name="query" placeholder="e.g., Learn Python for beginners"
                         class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                         required>
