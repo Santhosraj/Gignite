@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,27 +7,23 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles.css">
 </head>
-
 <body class="bg-gradient-to-br from-gray-900 to-indigo-900 text-white min-h-screen flex items-center justify-center">
     <div class="bg-gray-800 rounded-xl p-8 shadow-lg max-w-3xl w-full">
         <h1 class="text-3xl font-bold text-indigo-400 mb-6">{{ state.query }}</h1>
         {% if state.instructions %}
-        <div class="bg-gray-700 p-6 rounded-lg mb-6 overflow-auto max-h-96 whitespace-pre-wrap">{{ state.instructions }}
-        </div>
+            <div class="bg-gray-700 p-6 rounded-lg mb-6 overflow-auto max-h-96 whitespace-pre-wrap">{{ state.instructions }}</div>
         {% endif %}
         <p class="text-xl text-green-400 mb-4">Question {{ state.current_step + 1 }} of {{ state.questions|length }}</p>
         {% if state.category == "5" and state.start_time %}
-        <div id="timer" class="text-lg text-yellow-400 mb-4">Time Remaining: <span id="countdown"></span></div>
+            <div id="timer" class="text-lg text-yellow-400 mb-4">Time Remaining: <span id="countdown"></span></div>
         {% endif %}
         <p class="text-lg mb-6">{{ state.questions[state.current_step] }}</p>
         <form action="/submit_answer" method="post" class="space-y-4">
             <input type="hidden" name="session_id" value="{{ session_id }}">
-            <textarea name="answer" placeholder="Your answer here"
-                class="w-full p-3 bg-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 h-40"
-                required></textarea>
-            <button type="submit"
-                class="w-full p-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-medium transition duration-200">Submit
-                Answer</button>
+            <textarea name="answer" placeholder="Your answer here" 
+                      class="w-full p-3 bg-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 h-40" 
+                      required></textarea>
+            <button type="submit" class="w-full p-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-medium transition duration-200">Submit Answer</button>
         </form>
         <a href="/" class="block text-center mt-4 text-indigo-400 hover:text-indigo-300">Back to Home</a>
     </div>
@@ -36,7 +31,7 @@
     {% if state.category == "5" and state.start_time %}
     <script>
         // Total duration of the mock interview: 60 minutes in milliseconds
-         const totalDuration = 60 * 60 * 1000; // 3600000 ms
+        const totalDuration = 60 * 60 * 1000; // 3600000 ms
         // Server start time (Unix timestamp in seconds) converted to milliseconds 
         const startTime = Number("{{ state.start_time }}") * 1000;
         // Current time when page loads (in milliseconds)
@@ -47,8 +42,6 @@
         elapsedTime = Math.max(elapsedTime, 0);
         // Calculate remaining time, capped at totalDuration
         let timeLeft = Math.min(totalDuration - elapsedTime, totalDuration);
-
-        const countdownElement = document.getElementById("countdown");
 
         const countdownElement = document.getElementById("countdown");
 
@@ -81,5 +74,4 @@
     </script>
     {% endif %}
 </body>
-
 </html>
