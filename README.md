@@ -80,7 +80,7 @@ python app.py
 
 ## 📃 License
 
-This project is licensed under the Apache License. Feel free to use, modify, and build upon it.
+This project is licensed under the  Apache-2.0 license License. Feel free to use, modify, and build upon it.
 
 ---
 
