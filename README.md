@@ -74,13 +74,13 @@ python app.py
 
 **SanthosRaj**  
 🚀 Bridging AI with real-world career challenges.  
-🌐 [LinkedIn](https://linkedin.com/in/santhosraj)
+🌐 [LinkedIn](www.linkedin.com/in/santhos-raj-32939b242)
 
 ---
 
 ## 📃 License
 
-This project is licensed under the MIT License. Feel free to use, modify, and build upon it.
+This project is licensed under the Apache License. Feel free to use, modify, and build upon it.
 
 ---
 
