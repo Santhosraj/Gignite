@@ -36,7 +36,7 @@ Save your results, resumes, and feedback in your preferred format.
 
 ## 🧐 Tech Stack
 
-- **Frontend**: React.js  
+- **Frontend**: HTML , CSS  
 - **Backend**: Flask (Python)  
 - **AI/NLP**: GPT-based LLM agent, custom grading and question modules  
 - **Hosting**: Render.com  
