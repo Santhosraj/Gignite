@@ -6,34 +6,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Result - Gignite</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom Gradient Animation (Using Specified Colors) */
+        .gradient-animate {
+            background: linear-gradient(45deg, #17153B, #2E236C, #433D8B, #58117b);
+            background-size: 400%;
+            animation: gradient 10s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Glassmorphism Effect */
+        .glass {
+            background: rgba(200, 172, 214, 0.1);
+            /* #C8ACD6 with opacity */
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(200, 172, 214, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Card Hover Effect (Subtle) */
+        .card-hover:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Neon Glow (Subtle) */
+        .neon-glow {
+            box-shadow: 0 0 5px #433D8B, 0 0 10px #433D8B, 0 0 15px #C8ACD6;
+        }
+    </style>
 </head>
 
-<body class="bg-gradient-to-br from-gray-900 to-indigo-900 text-white min-h-screen flex items-center justify-center">
-    <div class="bg-gray-800 rounded-xl p-8 shadow-lg max-w-3xl w-full">
-        <h1 class="text-3xl font-bold text-indigo-400 mb-6">{{ state.query }}</h1>
-        <p class="text-xl text-green-400 mb-4">{{ state.response }}</p>
-        <div class="bg-gray-700 p-6 rounded-lg mb-6 overflow-auto max-h-96 whitespace-pre-wrap">{{ state.content }}
-        </div>
-        <form action="/save_file" method="post" class="space-y-4">
-            <input type="hidden" name="content" value="{{ state.content|escape }}">
-            <div class="flex space-x-4">
-                <input type="text" name="filename" placeholder="File name"
-                    class="w-full p-3 bg-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    required>
-                <select name="format_choice"
-                    class="p-3 bg-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <option value="md">Markdown (.md)</option>
-                    <option value="docx">Word (.docx)</option>
-                    <option value="pdf">PDF (.pdf)</option>
-                </select>
-            </div>
-            <button type="submit"
-                class="w-full p-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-medium transition duration-200">Download
-                File</button>
-        </form>
-        <a href="/" class="block text-center mt-4 text-indigo-400 hover:text-indigo-300">Back to Home</a>
+<body class="gradient-animate text-gray-100 min-h-screen flex">
+    <!-- Sidebar -->
+    <div
+        class="fixed h-full bg-[#17153B] w-64 p-4 transition-transform transform -translate-x-full md:translate-x-0 glass">
+        <h2 class="text-2xl font-bold text-[#C8ACD6] mb-6 text-center animate-pulse">
+            <i class="fas fa-fire-alt mr-2"></i>Gignite
+        </h2>
+        <nav>
+            <a href="/"
+                class="block py-2 px-4 text-[#C8ACD6] hover:bg-[#2E236C] hover:text-white rounded transition-all duration-300">
+                <i class="fas fa-home mr-2"></i>Home
+            </a>
+        </nav>
     </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 ml-0 md:ml-64 p-8">
+        <!-- Header -->
+        <header class="glass p-4 rounded-lg mb-6 flex items-center">
+            <h1 class="text-3xl font-bold text-[#C8ACD6] flex items-center">
+                <i class="fas fa-fire-alt mr-2"></i>Gignite
+            </h1>
+        </header>
+
+        <!-- Result Container -->
+        <div class="glass p-8 rounded-xl shadow-lg max-w-3xl w-full mx-auto card-hover">
+            <h1 class="text-3xl font-bold text-[#C8ACD6] mb-6">{{ state.query }}</h1>
+            <p class="text-xl text-[#C8ACD6] mb-4 flex items-center">
+                <i class="fas fa-check-circle mr-2"></i>{{ state.response }}
+            </p>
+            <div class="bg-[#2E236C] p-6 rounded-lg mb-6 overflow-auto max-h-96 whitespace-pre-wrap text-gray-200">
+                {{ state.content }}
+            </div>
+            <form action="/save_file" method="post" class="space-y-4">
+                <input type="hidden" name="content" value="{{ state.content|escape }}">
+                <div class="flex space-x-4">
+                    <input type="text" name="filename" placeholder="File name"
+                        class="w-full p-3 bg-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#433D8B] transition"
+                        required>
+                    <select name="format_choice"
+                        class="p-3 bg-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#433D8B] transition">
+                        <option value="md">Markdown (.md)</option>
+                        <option value="docx">Word (.docx)</option>
+                        <option value="pdf">PDF (.pdf)</option>
+                    </select>
+                </div>
+                <button type="submit"
+                    class="w-full p-3 bg-gradient-to-r from-[#2E236C] to-[#433D8B] hover:from-[#433D8B] hover:to-[#2E236C] rounded-lg font-medium transition duration-200 neon-glow">
+                    Download File
+                </button>
+            </form>
+            <a href="/" class="block text-center mt-4 text-[#C8ACD6] hover:text-[#433D8B] transition">Back to Home</a>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button id="menu-toggle" class="md:hidden fixed top-4 left-4 p-3 bg-[#433D8B] rounded-full neon-glow">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.querySelector('div.fixed');
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+    </script>
 </body>
 
 </html>
