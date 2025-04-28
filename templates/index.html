@@ -4,95 +4,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gignite - Focus on your goal</title>
+    <title>Gignite - Home</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom Gradient Animation */
+        .gradient-animate {
+            background: linear-gradient(135deg, #2E236C, #433D8B, #17153B);
+            background-size: 200% 200%;
+            animation: gradient 10s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 0%;
+            }
+
+            50% {
+                background-position: 100% 100%;
+            }
+
+            100% {
+                background-position: 0% 0%;
+            }
+        }
+
+        /* Glassmorphism Effect */
+        .glass {
+            background: rgba(200, 172, 214, 0.1);
+            /* #C8ACD6 with opacity */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(200, 172, 214, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Card Styling */
+        .card {
+            border-radius: 15px;
+            padding: 20px;
+            background: rgba(46, 35, 108, 0.7);
+            /* Slightly opaque #2E236C */
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Input Styling */
+        .input-field {
+            background-color: #4B5563;
+            /* Medium grey */
+            color: #FFFFFF;
+            /* White text */
+            border: 1px solid #6B7280;
+            /* Lighter grey border */
+            border-radius: 8px;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        /* Button Styling */
+        .btn {
+            background-color: #433D8B;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #2E236C;
+        }
+    </style>
 </head>
 
-<body class="bg-gradient-to-br from-gray-900 to-indigo-900 text-white min-h-screen">
-    <header class="bg-indigo-800 shadow-lg p-6">
-        <h1 class="text-4xl font-extrabold text-center text-indigo-200">Gignite</h1>
-        <p class="text-center text-indigo-300 mt-2">Fuel Your Future, Spark the Change</p>
-    </header>
-    <main class="container mx-auto p-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-xl transition duration-300">
-                <h2 class="text-2xl font-semibold text-indigo-400 mb-4">Resume Maker</h2>
+<body class="gradient-animate min-h-screen flex">
+    <!-- Sidebar -->
+    <div class="fixed h-full w-64 p-4 bg-[#2E236C] text-white">
+        <h2 class="text-2xl font-bold mb-6 text-center flex items-center justify-center">
+            <i class="fas fa-fire-alt mr-2"></i>Gignite
+        </h2>
+        <nav>
+            <a href="/"
+                class="block py-2 px-4 text-white hover:bg-[#433D8B] rounded transition-all duration-300 flex items-center">
+                <i class="fas fa-home mr-2"></i>Home
+            </a>
+            
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 ml-64 p-8 flex flex-col items-center">
+        <!-- Header -->
+        <header class="glass w-full max-w-4xl mb-6 p-4 text-center rounded-lg">
+            <h1 class="text-3xl font-bold text-[#C8ACD6] flex items-center justify-center">
+                <i class="fas fa-fire-alt mr-2"></i>Gignite
+            </h1>
+        </header>
+
+        <!-- Hero Section -->
+        <div class="text-center mb-12 w-full max-w-4xl">
+            <p class="text-lg text-white">Prepare, practice, and succeed with Gignite’s cutting-edge tools.</p>
+        </div>
+
+        <!-- Quick Start Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
+            <div class="card text-white">
+                <h3 class="text-xl font-bold mb-4 flex items-center">
+                    <i class="fas fa-file-alt mr-2"></i>Resume Maker
+                </h3>
                 <form action="/start_query" method="post" class="space-y-4">
-                    <input type="text" name="query" placeholder="e.g., Create a resume for AI engineer"
-                        class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        required>
-                    <button type="submit"
-                        class="w-full p-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-medium transition duration-200">Generate
-                        Resume</button>
-                </form>
-                <form action="/upload_resume" method="post" enctype="multipart/form-data" class="mt-4 space-y-4">
-                    <input type="text" name="target_role" placeholder="Target Role (e.g., AI Engineer)"
-                        class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        required>
-                    <input type="file" name="file" accept=".pdf,.doc,.docx"
-                        class="w-full p-3 bg-gray-700 rounded-lg text-white">
-                    <button type="submit"
-                        class="w-full p-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-medium transition duration-200">Upload
-                        & Grade</button>
+                    <input type="text" name="query" placeholder="Target Role" class="input-field" required>
+                    <input type="text" name="session_id" value="default" hidden>
+                    <button type="submit" class="btn" name="submit" value="submit">Create Resume</button>
                 </form>
             </div>
-
-            <div class="bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-xl transition duration-300">
-                <h2 class="text-2xl font-semibold text-green-400 mb-4">Interview Prep</h2>
-                <form action="/start_query" method="post" class="space-y-4">
-                    <input type="text" name="query" placeholder="e.g., Prepare for interview for Data Scientist"
-                        class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500"
-                        required>
-                    <button type="submit"
-                        class="w-full p-3 bg-green-600 hover:bg-green-700 rounded-lg font-medium transition duration-200">Get
-                        Questions</button>
+            <div class="card text-white">
+                <h3 class="text-xl font-bold mb-4 flex items-center">
+                    <i class="fas fa-check-square mr-2"></i>Resume Grader
+                </h3>
+                <form action="/upload_resume" method="post" enctype="multipart/form-data" class="space-y-4">
+                    <input type="file" name="file" class="input-field" required>
+                    <input type="text" name="target_role" placeholder="Target Role" class="input-field" required>
+                    <button type="submit" class="btn">Grade Now</button>
                 </form>
             </div>
-
-            <div class="bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-xl transition duration-300">
-                <h2 class="text-2xl font-semibold text-green-400 mb-4">Mock Interview</h2>
+            <div class="card text-white">
+                <h3 class="text-xl font-bold mb-4 flex items-center">
+                    <i class="fas fa-question-circle mr-2"></i>Interview Prep
+                </h3>
+                <form action="/start_query" method="post" class="space-y-4">
+                    <input type="text" name="query" placeholder="Enter role or topic" class="input-field" required>
+                    <input type="text" name="session_id" value="default" hidden>
+                    <button type="submit" class="btn" name="submit" value="submit">Generate Questions</button>
+                </form>
+            </div>
+            <div class="card text-white">
+                <h3 class="text-xl font-bold mb-4 flex items-center">
+                    <i class="fas fa-video mr-2"></i>Mock Interview
+                </h3>
                 <form action="/start_mock_interview" method="post" enctype="multipart/form-data" class="space-y-4">
-                    <input type="text" name="target_role" placeholder="Target Role (e.g., Data Scientist)"
-                        class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500"
-                        required>
-                    <input type="file" name="file" accept=".pdf,.doc,.docx"
-                        class="w-full p-3 bg-gray-700 rounded-lg text-white" required>
-                    <button type="submit"
-                        class="w-full p-3 bg-green-600 hover:bg-green-700 rounded-lg font-medium transition duration-200">Start
-                        Mock Interview</button>
+                    <input type="file" name="file" class="input-field" required>
+                    <input type="text" name="target_role" placeholder="Target Role" class="input-field" required>
+                    <button type="submit" class="btn">Begin</button>
                 </form>
             </div>
-
-            <div class="bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-xl transition duration-300">
-                <h2 class="text-2xl font-semibold text-blue-400 mb-4">Job Search</h2>
+            <div class="card text-white">
+                <h3 class="text-xl font-bold mb-4 flex items-center">
+                    <i class="fas fa-search mr-2"></i>Job Search Mate
+                </h3>
                 <form action="/start_query" method="post" class="space-y-4">
-                    <input type="text" name="query" placeholder="e.g., AI engineer jobs"
-                        class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required>
-                    <button type="submit"
-                        class="w-full p-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium transition duration-200">Search
-                        Jobs</button>
+                    <input type="text" name="query" placeholder="Enter your skills" class="input-field" required>
+                    <input type="text" name="session_id" value="default" hidden>
+                    <button type="submit" class="btn" name="submit" value="submit">Search Jobs</button>
                 </form>
             </div>
-
-            <div class="bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-xl transition duration-300">
-                <h2 class="text-2xl font-semibold text-purple-400 mb-4">Learning Resources</h2>
+            <div class="card text-white">
+                <h3 class="text-xl font-bold mb-4 flex items-center">
+                    <i class="fas fa-book mr-2"></i>Learning Resources
+                </h3>
                 <form action="/start_query" method="post" class="space-y-4">
-                    <input type="text" name="query" placeholder="e.g., Learn Python for beginners"
-                        class="w-full p-3 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        required>
-                    <button type="submit"
-                        class="w-full p-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-medium transition duration-200">Get
-                        Resources</button>
+                    <input type="text" name="query" placeholder="Enter topic or skill" class="input-field" required>
+                    <input type="text" name="session_id" value="default" hidden>
+                    <button type="submit" class="btn" name="submit" value="submit">Find Resources</button>
                 </form>
             </div>
         </div>
-    </main>
-    <footer class="text-center text-gray-400 py-4">
-        <p>Are you accelerating, anon?</p>
-        <p>San's production 🚀</p>
-    </footer>
+
+        <!-- Recent Activity -->
+        <div class="glass w-full max-w-4xl mt-12 p-6 text-white">
+            <h3 class="text-xl font-bold mb-4 flex items-center">
+               &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Are you accelerating, anon?
+                
+            </h3>
+            <h3 class="text-xl font-bold mb-4 flex items-center">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;San's Production 🚀</h3>
+           
+        </div>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button id="menu-toggle" class="md:hidden fixed top-4 left-4 p-3 bg-[#433D8B] rounded-full text-white">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.querySelector('div.fixed');
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+    </script>
 </body>
 
 </html>
