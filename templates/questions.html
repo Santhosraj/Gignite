@@ -1,32 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Questions - Gignite</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Gradient Background */
+        .bg-gradient-to-br {
+            background: linear-gradient(to bottom right, #1F2937, #4338CA);
+        }
+
+        /* Glassmorphism Effect */
+        .glass {
+            background: rgba(200, 172, 214, 0.1);
+            /* #C8ACD6 with opacity */
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(200, 172, 214, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Card Styling */
+        .card {
+            background: rgba(31, 41, 55, 0.9);
+            /* Slightly opaque gray-800 */
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        /* Card Hover Effect */
+        .card-hover:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Neon Glow */
+        .neon-glow {
+            box-shadow: 0 0 5px #433D8B, 0 0 10px #433D8B, 0 0 15px #aa5ed0;
+        }
+
+        /* Textarea Styling */
+        textarea {
+            background-color: #4B5563;
+            /* Medium grey */
+            color: #FFFFFF;
+            /* White text */
+            border: 1px solid #6B7280;
+            /* Lighter grey border */
+        }
+
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+    </style>
 </head>
-<body class="bg-gradient-to-br from-gray-900 to-indigo-900 text-white min-h-screen flex items-center justify-center">
-    <div class="bg-gray-800 rounded-xl p-8 shadow-lg max-w-3xl w-full">
-        <h1 class="text-3xl font-bold text-indigo-400 mb-6">{{ state.query }}</h1>
-        {% if state.instructions %}
-            <div class="bg-gray-700 p-6 rounded-lg mb-6 overflow-auto max-h-96 whitespace-pre-wrap">{{ state.instructions }}</div>
-        {% endif %}
-        <p class="text-xl text-green-400 mb-4">Question {{ state.current_step + 1 }} of {{ state.questions|length }}</p>
-        {% if state.category == "5" and state.start_time %}
-            <div id="timer" class="text-lg text-yellow-400 mb-4">Time Remaining: <span id="countdown"></span></div>
-        {% endif %}
-        <p class="text-lg mb-6">{{ state.questions[state.current_step] }}</p>
-        <form action="/submit_answer" method="post" class="space-y-4">
-            <input type="hidden" name="session_id" value="{{ session_id }}">
-            <textarea name="answer" placeholder="Your answer here" 
-                      class="w-full p-3 bg-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 h-40" 
-                      required></textarea>
-            <button type="submit" class="w-full p-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-medium transition duration-200">Submit Answer</button>
-        </form>
-        <a href="/" class="block text-center mt-4 text-indigo-400 hover:text-indigo-300">Back to Home</a>
+
+<body class="bg-gradient-to-br text-white min-h-screen flex">
+    <!-- Sidebar -->
+    <div
+        class="fixed h-full bg-[#17153B] w-64 p-4 transition-transform transform -translate-x-full md:translate-x-0 glass">
+        <h2 class="text-2xl font-bold text-[#C8ACD6] mb-6 text-center animate-pulse">
+            <i class="fas fa-fire-alt mr-2"></i>Gignite
+        </h2>
+        <nav>
+            <a href="/"
+                class="block py-2 px-4 text-[#C8ACD6] hover:bg-[#2E236C] hover:text-white rounded transition-all duration-300">
+                <i class="fas fa-home mr-2"></i>Home
+            </a>
+        </nav>
     </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 ml-0 md:ml-64 p-8 flex items-center justify-center">
+        <div class="card rounded-xl p-8 shadow-lg max-w-3xl w-full card-hover">
+            <h1 class="text-3xl font-bold text-indigo-400 mb-6">{{ state.query }}</h1>
+            {% if state.instructions %}
+            <div class="bg-gray-700 p-6 rounded-lg mb-6 overflow-auto max-h-96 whitespace-pre-wrap">{{
+                state.instructions }}</div>
+            {% endif %}
+            <p class="text-xl text-green-400 mb-4">Question {{ state.current_step + 1 }} of {{ state.questions|length }}
+            </p>
+            {% if state.category == "5" and state.start_time %}
+            <div id="timer" class="text-lg text-yellow-400 mb-4">Time Remaining: <span id="countdown"></span></div>
+            {% endif %}
+            <p class="text-lg mb-6">{{ state.questions[state.current_step] }}</p>
+            <form action="/submit_answer" method="post" class="space-y-4">
+                <input type="hidden" name="session_id" value="{{ session_id }}">
+                <textarea name="answer" placeholder="Your answer here"
+                    class="w-full p-3 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 h-40"
+                    required></textarea>
+                <button type="submit"
+                    class="w-full p-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-medium transition duration-200 neon-glow">Submit
+                    Answer</button>
+            </form>
+            <a href="/" class="block text-center mt-4 text-indigo-400 hover:text-indigo-300">Back to Home</a>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button id="menu-toggle" class="md:hidden fixed top-4 left-4 p-3 bg-[#433D8B] rounded-full neon-glow">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.querySelector('div.fixed');
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+    </script>
 
     {% if state.category == "5" and state.start_time %}
     <script>
@@ -37,9 +121,7 @@
         // Current time when page loads (in milliseconds)
         const currentTime = Date.now();
         // Calculate elapsed time since the mock interview started
-        let elapsedTime = currentTime - startTime;
-        // Ensure elapsedTime is not negative (in case of clock skew or session issues)
-        elapsedTime = Math.max(elapsedTime, 0);
+        let elapsedTime = Math.max(currentTime - startTime, 0);
         // Calculate remaining time, capped at totalDuration
         let timeLeft = Math.min(totalDuration - elapsedTime, totalDuration);
 
@@ -55,6 +137,7 @@
                 clearInterval(timerInterval);
                 countdownElement.textContent = "0:00";
                 alert("Time's up! Please submit your final answer.");
+                document.querySelector("form").submit(); // Auto-submit on timeout
             } else {
                 timeLeft -= 1000; // Decrease by 1 second
             }
@@ -70,8 +153,10 @@
         } else {
             countdownElement.textContent = "0:00";
             alert("Time's up! The mock interview has ended.");
+            document.querySelector("form").submit(); // Auto-submit on page unload
         }
     </script>
     {% endif %}
 </body>
+
 </html>
